@@ -1,0 +1,67 @@
+version: '3.8'
+services:
+        nginx:
+                build:
+                        dockerfile: ./docker/nginx.dockerfile
+                        context: .
+                image: almevag/nginx
+                container_name: nginx
+                ports:
+                        - "80:80"
+                networks: 
+                        - corporativa
+                depends_on:
+                        - "node1"
+                        - "node2"
+                        - "node3"
+
+        mongodb:
+                image: mongo
+                container_name: mongodb
+                ports:
+                        - "27017:27017"
+                networks:
+                        - corporativa
+
+        node1:
+                build:
+                        dockerfile: ./docker/alura-books.dockerfile
+                        context: .
+                image: almevag/alurabooks
+                container_name: alura-books-1
+                ports:
+                        - "3000"
+                networks:
+                        - corporativa
+                depends_on:
+                        - "mongodb"
+
+        node2:
+                build:
+                        dockerfile: ./docker/alura-books.dockerfile
+                        context: .
+                image: almevag/alurabooks
+                container_name: alura-books-2
+                ports:
+                        - "3000"
+                networks:
+                        - corporativa
+                depends_on:
+                        - "mongodb"
+
+        node3:
+                build:
+                        dockerfile: ./docker/alura-books.dockerfile
+                        context: .
+                image: almevag/alurabooks
+                container_name: alura-books-3
+                ports:
+                        - "3000"
+                networks:
+                        - corporativa
+                depends_on:
+                        - "mongodb"
+                        
+networks:
+        corporativa:
+                driver: bridge
